@@ -16,7 +16,7 @@ public class ApiCliente {
         //Monta a requisição
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(
-                        "http://open.er-api.com/v6/latest/USD" + moeda))
+                        "http://open.er-api.com/v6/latest/" + moeda))
                 .GET()
                 .build();
 

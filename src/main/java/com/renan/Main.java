@@ -14,33 +14,43 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class Main extends Application {
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException, InterruptedException {
 
         Label titulo = new Label("Cotação de Moedas");
-
-        ComboBox<String> moedas = new ComboBox<>();
-        moedas.getItems().addAll(
-                "USD",
-                "EUR",
-                "GBP",
-                "JPY"
-        );
-        moedas.setValue("USD");
-
         Label resultado = new Label("Nenhuma consulta realizada");
-
         Button btnConverter = new Button("Converter");
-
         TextField txtValor = new TextField();
 
         ComboBox<String> moedaOrigem =
                 new ComboBox<>();
+
         ComboBox<String> moedaDestino =
                 new ComboBox<>();
+
+        ApiCliente api = new ApiCliente();
+
+        String json =
+                api.buscarCotacao("USD");
+
+        Gson gson = new Gson();
+
+        CurrencyResponse response =
+                gson.fromJson(
+                        json,
+                        CurrencyResponse.class);
+
+        moedaOrigem.getItems().addAll(
+                response.getRates().keySet()
+        );
+
+        moedaDestino.getItems().addAll(
+                response.getRates().keySet()
+        );
 
         btnConverter.setOnAction(event -> {
             try {
@@ -50,27 +60,17 @@ public class Main extends Application {
                 String destino =
                         moedaDestino.getValue();
 
-                double valor =
-                        Double.parseDouble(
-                                txtValor.getText());
-
-
-                ApiCliente api = new ApiCliente();
-
-                String json =
+                String jsonAtual =
                         api.buscarCotacao(origem);
 
-                Gson gson = new Gson();
-
-                CurrencyResponse response =
+                CurrencyResponse responseAtual =
                         gson.fromJson(
-                                json,
-                                CurrencyResponse.class);
+                        jsonAtual,
+                        CurrencyResponse.class);
 
-                double taxa =
-                        response.getRates().get(destino);
-                double convertido =
-                        valor * taxa;
+                double valor = Double.parseDouble(txtValor.getText());
+                double taxa = responseAtual.getRates().get(destino);
+                double convertido = valor * taxa;
 
                 resultado.setText(
                         String.format(
@@ -81,19 +81,23 @@ public class Main extends Application {
                                 destino
                         )
                 );
+
             }catch (Exception ex){
-                resultado.setText("Erro ao consultar API");
+                resultado.setText(ex.getMessage());
                 ex.printStackTrace();
             }
         });
 
-        txtValor.setPromptText("Digite o valor");
+
         VBox layout = new VBox(20);
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: #1e1e1e;");
+        txtValor.setPromptText("Digite o valor");
         layout.getChildren().addAll(
                 titulo,
-                moedas,
+                moedaOrigem,
+                moedaDestino,
+                txtValor,
                 btnConverter,
                 resultado
         );
