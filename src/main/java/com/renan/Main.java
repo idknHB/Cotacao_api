@@ -9,8 +9,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import javax.swing.*;
 
 public class Main extends Application {
 
@@ -30,17 +33,32 @@ public class Main extends Application {
 
         Label resultado = new Label("Nenhuma consulta realizada");
 
-        Button btnBuscar = new Button("Buscar Cotação");
+        Button btnConverter = new Button("Converter");
 
-        btnBuscar.setOnAction(e -> {
+        TextField txtValor = new TextField();
+
+        ComboBox<String> moedaOrigem =
+                new ComboBox<>();
+        ComboBox<String> moedaDestino =
+                new ComboBox<>();
+
+        btnConverter.setOnAction(event -> {
             try {
-                String moedaSelecionada =
-                        moedas.getValue();
+                String origem =
+                        moedaOrigem.getValue();
+
+                String destino =
+                        moedaDestino.getValue();
+
+                double valor =
+                        Double.parseDouble(
+                                txtValor.getText());
+
 
                 ApiCliente api = new ApiCliente();
 
                 String json =
-                        api.buscarCotacao(moedaSelecionada);
+                        api.buscarCotacao(origem);
 
                 Gson gson = new Gson();
 
@@ -49,9 +67,19 @@ public class Main extends Application {
                                 json,
                                 CurrencyResponse.class);
 
+                double taxa =
+                        response.getRates().get(destino);
+                double convertido =
+                        valor * taxa;
+
                 resultado.setText(
-                        "BRL: " +
-                        response.getRates().get("BRL")
+                        String.format(
+                                "%.2f %s - %.2f %s",
+                                valor,
+                                origem,
+                                convertido,
+                                destino
+                        )
                 );
             }catch (Exception ex){
                 resultado.setText("Erro ao consultar API");
@@ -59,14 +87,14 @@ public class Main extends Application {
             }
         });
 
-
+        txtValor.setPromptText("Digite o valor");
         VBox layout = new VBox(20);
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: #1e1e1e;");
         layout.getChildren().addAll(
                 titulo,
                 moedas,
-                btnBuscar,
+                btnConverter,
                 resultado
         );
         titulo.setStyle(
