@@ -27,7 +27,7 @@ public class ApiCliente {
 
         //Teste de resposta
         //Codigo esperado : 200
-        System.out.println(response.statusCode());
+        //System.out.println(response.statusCode());
         return response.body();
     }
 }

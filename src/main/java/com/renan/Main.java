@@ -31,7 +31,7 @@ public class Main extends Application {
         Label lblDestino = new Label("Moeda de destino");
         Label lblValor = new Label("Valor");
         Button btnConverter = new Button("Converter");
-//        Button btnTrocar = new Button("⇅");
+        Button btnTrocar = new Button("⇅");
         TextField txtValor = new TextField();
 
         ComboBox<Moeda> moedaOrigem =
@@ -113,14 +113,14 @@ public class Main extends Application {
             }
         });
 
-//       btnTrocar.setOnAction(event -> {
-//           Moeda temp = moedaOrigem.getValue();
-//
-//           moedaOrigem.setValue(
-//                   moedaDestino.getValue());
-//
-//           moedaDestino.setValue(temp);
-//       });
+       btnTrocar.setOnAction(event -> {
+           Moeda temp = moedaOrigem.getValue();
+
+           moedaOrigem.setValue(
+                   moedaDestino.getValue());
+
+           moedaDestino.setValue(temp);
+       });
 
 
         VBox layout = new VBox(20);
@@ -142,7 +142,7 @@ public class Main extends Application {
         layout.getChildren().addAll(
                 titulo,
                 moedaOrigem,
-//                btnTrocar,
+                btnTrocar,
                 moedaDestino,
                 txtValor,
                 btnConverter,
