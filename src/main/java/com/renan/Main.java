@@ -6,6 +6,7 @@ import com.renan.serivce.ApiCliente;
 import com.renan.model.Moeda;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -26,7 +27,11 @@ public class Main extends Application {
 
         Label titulo = new Label("Cotação de Moedas");
         Label resultado = new Label("Nenhuma consulta realizada");
+        Label lblOrigem = new Label("Moeda de origem");
+        Label lblDestino = new Label("Moeda de destino");
+        Label lblValor = new Label("Valor");
         Button btnConverter = new Button("Converter");
+//        Button btnTrocar = new Button("⇅");
         TextField txtValor = new TextField();
 
         ComboBox<Moeda> moedaOrigem =
@@ -108,25 +113,63 @@ public class Main extends Application {
             }
         });
 
+//       btnTrocar.setOnAction(event -> {
+//           Moeda temp = moedaOrigem.getValue();
+//
+//           moedaOrigem.setValue(
+//                   moedaDestino.getValue());
+//
+//           moedaDestino.setValue(temp);
+//       });
+
 
         VBox layout = new VBox(20);
+        VBox card = new VBox(15);
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: #1e1e1e;");
+        layout.setAlignment(Pos.CENTER);
         txtValor.setPromptText("Digite o valor");
+
+        moedaOrigem.setPrefWidth(300);
+        moedaDestino.setPrefWidth(300);
+        txtValor.setPrefWidth(300);
+        btnConverter.setPrefWidth(300);
+
+        lblOrigem.setStyle("-fx-text-fill: white;");
+        lblDestino.setStyle("-fx-text-fill: white;");
+        lblValor.setStyle("-fx-text-fill: white;");
+
         layout.getChildren().addAll(
                 titulo,
                 moedaOrigem,
+//                btnTrocar,
                 moedaDestino,
                 txtValor,
                 btnConverter,
                 resultado
         );
+        card.setStyle(
+                "-fx-background-color: #252526;" +
+                        "-fx-background-radius: 12;" +
+                        "-fx-padding: 25;"
+        );
+        btnConverter.setStyle(
+                "-fx-background-color: #0078D7;" +
+                "-fx-text-fill: white;" +
+                "-fx-font-weight: bold;" +
+                "-fx-background-radius: 8;"
+
+        );
         titulo.setStyle(
-                "-fx-font-size: 22px;" +
+                "-fx-font-size: 28px;" +
                 "-fx-text-fill: white;"+
                 "-fx-font-weight: bold;"
         );
-        resultado.setStyle("-fx-text-fill:white");
+        resultado.setStyle(
+                "-fx-text-fill: #4CAF50;" +
+                "-fx-font-size: 18px;" +
+                "-fx-font-weight: bold;"
+                );
         Scene scene = new Scene(layout, 500, 350);
 
         stage.setTitle("Cotação API");
