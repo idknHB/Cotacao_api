@@ -3,6 +3,7 @@ package com.renan;
 import com.google.gson.Gson;
 import com.renan.model.CurrencyResponse;
 import com.renan.serivce.ApiCliente;
+import com.renan.model.Moeda;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -16,6 +17,8 @@ import javafx.stage.Stage;
 import javax.swing.*;
 import java.io.IOException;
 
+import java.util.Currency;
+
 public class Main extends Application {
 
     @Override
@@ -26,10 +29,10 @@ public class Main extends Application {
         Button btnConverter = new Button("Converter");
         TextField txtValor = new TextField();
 
-        ComboBox<String> moedaOrigem =
+        ComboBox<Moeda> moedaOrigem =
                 new ComboBox<>();
 
-        ComboBox<String> moedaDestino =
+        ComboBox<Moeda> moedaDestino =
                 new ComboBox<>();
 
         ApiCliente api = new ApiCliente();
@@ -44,21 +47,38 @@ public class Main extends Application {
                         json,
                         CurrencyResponse.class);
 
-        moedaOrigem.getItems().addAll(
-                response.getRates().keySet()
-        );
+       for(String codigo : response.getRates().keySet()){
 
-        moedaDestino.getItems().addAll(
-                response.getRates().keySet()
-        );
+           String nome;
+
+           try{
+               nome = Currency
+                       .getInstance(codigo)
+                       .getDisplayName();
+           }catch (Exception e){
+               nome = codigo;
+           }
+           moedaOrigem.getItems().add(
+                   new Moeda(
+                           codigo,
+                           nome
+                   )
+           );
+           moedaDestino.getItems().add(
+                   new Moeda(
+                           codigo,
+                           nome
+                   )
+           );
+       }
 
         btnConverter.setOnAction(event -> {
             try {
                 String origem =
-                        moedaOrigem.getValue();
+                        moedaOrigem.getValue().getCodigo();
 
                 String destino =
-                        moedaDestino.getValue();
+                        moedaDestino.getValue().getCodigo();
 
                 String jsonAtual =
                         api.buscarCotacao(origem);
