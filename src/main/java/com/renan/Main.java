@@ -101,11 +101,9 @@ public class Main extends Application {
 
                 resultado.setText(
                         String.format(
-                                "%.2f %s - %.2f %s",
-                                valor,
-                                origem,
-                                convertido,
-                                destino
+                                "%.2f",
+
+                                convertido
                         )
                 );
 
