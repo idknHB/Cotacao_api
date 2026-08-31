@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -32,7 +33,7 @@ public class Main extends Application {
         Label lblDestino = new Label("Moeda de destino");
         Label lblValor = new Label("Valor");
         Button btnConverter = new Button("Converter");
-        Button btnTrocar = new Button("⇅");
+        Button btnTrocar = new Button("\uD83D\uDD04");
         TextField txtValor = new TextField();
 
         ComboBox<Moeda> moedaOrigem =
@@ -126,6 +127,8 @@ public class Main extends Application {
 
         VBox layout = new VBox(20);
         VBox card = new VBox(15);
+        VBox cardResultado = new VBox(resultado);
+        DropShadow shadow = new DropShadow();
         layout.setPadding(new Insets(20));
         layout.setStyle("-fx-background-color: #121212;");
         layout.setAlignment(Pos.CENTER);
@@ -145,6 +148,23 @@ public class Main extends Application {
         btnConverter.setStyle(Styles.BUTTON);
         card.setStyle(Styles.CARD);
 
+        moedaOrigem.setPrefHeight(35);
+        moedaDestino.setPrefHeight(35);
+        txtValor.prefHeight(35);
+        btnConverter.prefHeight(55);
+        btnConverter.setMaxWidth(250);
+
+        shadow.setRadius(15);
+        btnConverter.setEffect(shadow);
+
+        cardResultado.setStyle(
+                "-fx-background-color: #1A1A1A;" +
+                "-fx-background-radius: 15;" +
+                "-fx-padding: 20;"
+        );
+
+        cardResultado.setAlignment(Pos.CENTER);
+
         layout.getChildren().addAll(
                 titulo,
                 moedaOrigem,
@@ -152,9 +172,9 @@ public class Main extends Application {
                 moedaDestino,
                 txtValor,
                 btnConverter,
-                resultado
+                cardResultado
         );
-        Scene scene = new Scene(layout, 500, 350);
+        Scene scene = new Scene(layout, 800, 600);
 
         stage.setTitle("Cotação API");
         stage.setScene(scene);
