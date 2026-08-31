@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.renan.model.CurrencyResponse;
 import com.renan.serivce.ApiCliente;
 import com.renan.model.Moeda;
+import com.renan.ui.Styles;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -139,6 +140,11 @@ public class Main extends Application {
         lblDestino.setStyle("-fx-text-fill: white;");
         lblValor.setStyle("-fx-text-fill: white;");
 
+        titulo.setStyle(Styles.TITLE);
+        resultado.setStyle(Styles.RESULT);
+        btnConverter.setStyle(Styles.BUTTON);
+        card.setStyle(Styles.CARD);
+
         layout.getChildren().addAll(
                 titulo,
                 moedaOrigem,
@@ -148,32 +154,6 @@ public class Main extends Application {
                 btnConverter,
                 resultado
         );
-        card.setStyle(
-                "-fx-background-color: #1e1e1e;" +
-                        "-fx-background-radius: 12;" +
-                        "-fx-padding: 25;"
-        );
-        btnConverter.setStyle(
-                "-fx-background-color: #3B82F6;" +
-                "-fx-text-fill: white;" +
-                "-fx-font-weight: bold;" +
-                "-fx-background-radius: 8;"
-
-        );
-        btnTrocar.setStyle(
-                "-fx-background-radius: 20;" +
-                "-fx-font-size: 18px;"
-        );
-        titulo.setStyle(
-                "-fx-font-size: 28px;" +
-                "-fx-text-fill: white;"+
-                "-fx-font-weight: bold;"
-        );
-        resultado.setStyle(
-                "-fx-text-fill: #22C55E;" +
-                "-fx-font-size: 18px;" +
-                "-fx-font-weight: bold;"
-                );
         Scene scene = new Scene(layout, 500, 350);
 
         stage.setTitle("Cotação API");
