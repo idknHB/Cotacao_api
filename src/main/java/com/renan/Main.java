@@ -126,7 +126,7 @@ public class Main extends Application {
         VBox layout = new VBox(20);
         VBox card = new VBox(15);
         layout.setPadding(new Insets(20));
-        layout.setStyle("-fx-background-color: #1e1e1e;");
+        layout.setStyle("-fx-background-color: #121212;");
         layout.setAlignment(Pos.CENTER);
         txtValor.setPromptText("Digite o valor");
 
@@ -149,16 +149,20 @@ public class Main extends Application {
                 resultado
         );
         card.setStyle(
-                "-fx-background-color: #252526;" +
+                "-fx-background-color: #1e1e1e;" +
                         "-fx-background-radius: 12;" +
                         "-fx-padding: 25;"
         );
         btnConverter.setStyle(
-                "-fx-background-color: #0078D7;" +
+                "-fx-background-color: #3B82F6;" +
                 "-fx-text-fill: white;" +
                 "-fx-font-weight: bold;" +
                 "-fx-background-radius: 8;"
 
+        );
+        btnTrocar.setStyle(
+                "-fx-background-radius: 20;" +
+                "-fx-font-size: 18px;"
         );
         titulo.setStyle(
                 "-fx-font-size: 28px;" +
@@ -166,7 +170,7 @@ public class Main extends Application {
                 "-fx-font-weight: bold;"
         );
         resultado.setStyle(
-                "-fx-text-fill: #4CAF50;" +
+                "-fx-text-fill: #22C55E;" +
                 "-fx-font-size: 18px;" +
                 "-fx-font-weight: bold;"
                 );

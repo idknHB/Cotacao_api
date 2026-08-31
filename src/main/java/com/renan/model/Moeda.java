@@ -1,30 +1,36 @@
 package com.renan.model;
 
-public class Moeda {
-    private String codigo;
-    private  String nome;
+import java.util.Objects;
 
-    public Moeda(String codigo, String nome){
+public class Moeda {
+
+    private String codigo;
+    private String nome;
+
+    public Moeda(String codigo, String nome) {
         this.codigo = codigo;
         this.nome = nome;
     }
 
-    public String getCodigo(){
+    public String getCodigo() {
         return codigo;
     }
-    public String getNome(){
+
+    public String getNome() {
         return nome;
     }
 
     @Override
-    public String toString(){
-     return codigo + " - " + nome;
+    public String toString() {
+        return codigo + " - " + nome;
     }
 
     @Override
-    public boolean equals(Object obj){
-        if(this ==  obj) return true;
-        if(obj == null || getClass() != obj.getClass()) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+
+        if (obj == null || getClass() != obj.getClass())
+            return false;
 
         Moeda moeda = (Moeda) obj;
 
@@ -32,7 +38,7 @@ public class Moeda {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return codigo.hashCode();
     }
 }
