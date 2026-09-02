@@ -43,6 +43,7 @@ public class MainView {
             new ConversorService();
 
     private boolean trocando = false;
+    private boolean atualizando = false;
 
     public MainView() {
 
@@ -75,8 +76,6 @@ public class MainView {
         btnTrocar.setStyle(
                 Styles.SWAP_BUTTON
         );
-
-        txtDestino.setEditable(false);
 
         moedaOrigem.setPrefWidth(300);
 
@@ -146,7 +145,7 @@ public class MainView {
 
                     };
                     task.setOnSucceeded(e -> {
-                        converter();
+                        converterOrigemParaDestino();
                     });
 
                     new Thread(task).start();
@@ -155,17 +154,23 @@ public class MainView {
 
 
         moedaDestino.setOnAction(
-                event -> converter()
+                event -> converterOrigemParaDestino()
         );
 
         txtOrigem.textProperty().addListener(
-                (obs, oldValue, newValue) ->
-                        converter()
-        );
+                (obs, oldValue, newValue) -> {
+                    if(atualizando){return;}
+                    converterOrigemParaDestino();
+                });
+        txtDestino.textProperty().addListener((obs, oldValue, newValue) -> {
+            if(atualizando){return;}
+
+            converterDestinoParaOrigem();
+        });
 
         btnTrocar.setOnAction(event -> {
 
-            trocando = true;
+            trocando  = true;
 
             String txtTemp = txtOrigem.getText();
 
@@ -184,54 +189,10 @@ public class MainView {
 
             trocando = false;
 
-            converter();
+            converterOrigemParaDestino();
         });
     }
-
-    private void converter() {
-
-        if(trocando){
-            return;
-        }
-        if (
-                moedaOrigem.getValue() == null
-                        || moedaDestino.getValue() == null
-        ) {
-            return;
-        }
-        if(txtOrigem.getText().isBlank()){
-            txtDestino.clear();
-            return;
-        }
-
-        try {
-
-            double valor =
-                    Double.parseDouble(
-                            txtOrigem.getText()
-                                    .replace(",", ".")
-                    );
-
-            double convertido =
-                    conversor.converter(
-                            moedaOrigem.getValue().getCodigo(),
-                            moedaDestino.getValue().getCodigo(),
-                            valor
-                    );
-
-            txtDestino.setText(
-                    String.format(
-                            "%.4f",
-                            convertido
-                    )
-            );
-
-        } catch (Exception e) {
-            txtDestino.setText("Erro ao converter");
-            e.printStackTrace();
-        }
-    }
-
+    
     private void carregarMoedas() {
 
         try {
@@ -292,6 +253,80 @@ public class MainView {
         } catch (Exception e) {
 
             e.printStackTrace();
+        }
+    }
+
+    private void converterOrigemParaDestino() {
+        if(trocando){return;}
+        try {
+            if(txtOrigem.getText().isBlank()){
+                txtDestino.clear();
+                return;
+            }
+            atualizando = true;
+
+            double valor =
+                    Double.parseDouble(
+                            txtOrigem.getText()
+                                    .replace(",", ".")
+                    );
+
+            double convertido =
+                    conversor.converter(
+                            moedaOrigem.getValue().getCodigo(),
+                            moedaDestino.getValue().getCodigo(),
+                            valor
+                    );
+
+            txtDestino.setText(
+                    String.format(
+                            "%.4f",
+                            convertido
+                    )
+            );
+
+
+        }catch (Exception ignore){
+        }
+        finally {
+            atualizando = false;
+        }
+    }
+
+    private void converterDestinoParaOrigem() {
+        if(trocando){return;}
+        try {
+            if(txtDestino.getText().isBlank()){
+                txtOrigem.clear();
+                return;
+            }
+            atualizando = true;
+
+            double valor =
+                    Double.parseDouble(
+                            txtDestino.getText()
+                                    .replace(",", ".")
+                    );
+
+            double convertido =
+                    conversor.converter(
+                            moedaDestino.getValue().getCodigo(),
+                            moedaOrigem.getValue().getCodigo(),
+                            valor
+                    );
+
+            txtOrigem.setText(
+                    String.format(
+                            "%.4f",
+                            convertido
+                    )
+            );
+
+
+        }catch (Exception ignore){
+        }
+        finally {
+            atualizando = false;
         }
     }
 }
