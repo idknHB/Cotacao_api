@@ -5,6 +5,7 @@ import com.renan.model.CurrencyResponse;
 import com.renan.model.Moeda;
 import com.renan.service.ApiCliente;
 import com.renan.service.ConversorService;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -69,8 +70,26 @@ public class MainView {
     private void configurarEventos() {
 
         moedaOrigem.setOnAction(
-                event -> converter()
-        );
+                event -> {
+
+                    Task<Void> task = new Task<Void>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            conversor.atualizarTaxa(
+                                    moedaOrigem.getValue().getCodigo()
+                            );
+                            return null;
+                        }
+
+                    };
+                    task.setOnSucceeded(e -> {
+                        converter();
+                    });
+
+                    new Thread(task).start();
+
+                });
+
 
         moedaDestino.setOnAction(
                 event -> converter()
@@ -97,7 +116,7 @@ public class MainView {
     }
 
     private void converter() {
-
+        
         try {
 
             if (
@@ -128,10 +147,7 @@ public class MainView {
             );
 
         } catch (Exception e) {
-
-            resultado.setText(
-                    "Erro na conversão"
-            );
+            resultado.setText("Erro ao converter");
         }
     }
 

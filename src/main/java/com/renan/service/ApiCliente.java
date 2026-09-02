@@ -19,14 +19,14 @@ public class ApiCliente {
                 .GET()
                 .build();
 
+        long inicio = System.currentTimeMillis();
+
         //Envia a requisição e recebe a resposta
         HttpResponse<String> response =
                 client.send(request,
                         HttpResponse.BodyHandlers.ofString());
 
-        //Teste de resposta
-        //Codigo esperado : 200
-        //System.out.println(response.statusCode());
+        System.out.println("Consultando API");
         return response.body();
     }
 }
