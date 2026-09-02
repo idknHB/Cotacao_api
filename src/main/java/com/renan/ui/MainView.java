@@ -42,6 +42,8 @@ public class MainView {
     private final ConversorService conversor =
             new ConversorService();
 
+    private boolean trocando = false;
+
     public MainView() {
 
         carregarMoedas();
@@ -163,14 +165,24 @@ public class MainView {
 
         btnTrocar.setOnAction(event -> {
 
-            Moeda temp =
+            trocando = true;
+
+            String txtTemp = txtOrigem.getText();
+
+            txtOrigem.setText(txtDestino.getText());
+
+            txtDestino.setText(txtTemp);
+
+            Moeda moedaTemp =
                     moedaOrigem.getValue();
 
             moedaOrigem.setValue(
                     moedaDestino.getValue()
             );
 
-            moedaDestino.setValue(temp);
+            moedaDestino.setValue(moedaTemp);
+
+            trocando = false;
 
             converter();
         });
@@ -178,19 +190,26 @@ public class MainView {
 
     private void converter() {
 
-        try {
+        if(trocando){
+            return;
+        }
+        if (
+                moedaOrigem.getValue() == null
+                        || moedaDestino.getValue() == null
+        ) {
+            return;
+        }
+        if(txtOrigem.getText().isBlank()){
+            txtDestino.clear();
+            return;
+        }
 
-            if (
-                    moedaOrigem.getValue() == null
-                            || moedaDestino.getValue() == null
-                            || txtOrigem.getText().isEmpty()
-            ) {
-                return;
-            }
+        try {
 
             double valor =
                     Double.parseDouble(
                             txtOrigem.getText()
+                                    .replace(",", ".")
                     );
 
             double convertido =
@@ -202,7 +221,7 @@ public class MainView {
 
             txtDestino.setText(
                     String.format(
-                            "%.2f",
+                            "%.4f",
                             convertido
                     )
             );
