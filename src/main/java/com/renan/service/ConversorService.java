@@ -38,11 +38,7 @@ public class ConversorService {
         return response;
     }
 
-    public double converter(
-            String origem,
-            String destino,
-            double valor
-    ) throws Exception {
+    public double converter(String origem, String destino, double valor) throws Exception {
 
         CurrencyResponse response = atualizarTaxa(origem);
 

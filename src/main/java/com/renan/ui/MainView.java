@@ -18,6 +18,9 @@ public class MainView {
     private final VBox layout =
             new VBox(20);
 
+    private final VBox card =
+            new VBox(15);
+
     private final Label titulo =
             new Label("Cotação de Moedas");
 
@@ -43,9 +46,51 @@ public class MainView {
 
         carregarMoedas();
 
+        aplicarEstilos();
+
         configurarEventos();
 
         montarLayout();
+    }
+
+    public void aplicarEstilos(){
+        layout.setStyle(
+                Styles.ROOT
+        );
+
+        titulo.setStyle(
+                Styles.TITLE
+        );
+
+        resultado.setStyle(
+                Styles.RESULT
+        );
+
+        txtValor.setStyle(
+                Styles.INPUT
+        );
+
+        moedaOrigem.setStyle(
+                Styles.COMBO
+        );
+
+        moedaDestino.setStyle(
+                Styles.COMBO
+        );
+
+        btnTrocar.setStyle(
+                Styles.SWAP_BUTTON
+        );
+
+        moedaOrigem.setPrefWidth(300);
+
+        moedaDestino.setPrefWidth(300);
+
+        txtValor.setPrefWidth(300);
+
+        btnTrocar.setMinSize(50, 50);
+
+        btnTrocar.setMaxSize(50, 50);
     }
 
     public VBox getLayout() {
@@ -57,7 +102,13 @@ public class MainView {
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
 
-        layout.getChildren().addAll(
+        card.setAlignment(Pos.CENTER);
+
+        card.setStyle(
+                Styles.CARD
+        );
+
+        card.getChildren().addAll(
                 titulo,
                 moedaOrigem,
                 btnTrocar,
@@ -65,6 +116,8 @@ public class MainView {
                 txtValor,
                 resultado
         );
+
+        layout.getChildren().add(card);
     }
 
     private void configurarEventos() {
@@ -116,7 +169,7 @@ public class MainView {
     }
 
     private void converter() {
-        
+
         try {
 
             if (

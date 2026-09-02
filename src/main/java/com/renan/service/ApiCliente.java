@@ -26,7 +26,6 @@ public class ApiCliente {
                 client.send(request,
                         HttpResponse.BodyHandlers.ofString());
 
-        System.out.println("Consultando API");
         return response.body();
     }
 }
