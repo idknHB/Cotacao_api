@@ -9,6 +9,7 @@ import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.Currency;
@@ -24,10 +25,9 @@ public class MainView {
     private final Label titulo =
             new Label("Cotação de Moedas");
 
-    private final Label resultado =
-            new Label("Nenhuma consulta realizada");
-
-    private final TextField txtValor =
+    private final TextField txtOrigem =
+            new TextField();
+    private final TextField txtDestino =
             new TextField();
 
     private final ComboBox<Moeda> moedaOrigem =
@@ -62,14 +62,6 @@ public class MainView {
                 Styles.TITLE
         );
 
-        resultado.setStyle(
-                Styles.RESULT
-        );
-
-        txtValor.setStyle(
-                Styles.INPUT
-        );
-
         moedaOrigem.setStyle(
                 Styles.COMBO
         );
@@ -82,11 +74,11 @@ public class MainView {
                 Styles.SWAP_BUTTON
         );
 
+        txtDestino.setEditable(false);
+
         moedaOrigem.setPrefWidth(300);
 
         moedaDestino.setPrefWidth(300);
-
-        txtValor.setPrefWidth(300);
 
         btnTrocar.setMinSize(50, 50);
 
@@ -99,6 +91,24 @@ public class MainView {
 
     private void montarLayout() {
 
+        HBox linhaOrigem = new HBox(10);
+
+        linhaOrigem.setAlignment(Pos.CENTER);
+
+        linhaOrigem.getChildren().addAll(
+                txtOrigem,
+                moedaOrigem
+        );
+
+        HBox linhaDestino = new HBox(10);
+
+        linhaDestino.setAlignment(Pos.CENTER);
+
+        linhaDestino.getChildren().addAll(
+                txtDestino,
+                moedaDestino
+        );
+
         layout.setAlignment(Pos.CENTER);
         layout.setPadding(new Insets(20));
 
@@ -110,11 +120,9 @@ public class MainView {
 
         card.getChildren().addAll(
                 titulo,
-                moedaOrigem,
+                linhaOrigem,
                 btnTrocar,
-                moedaDestino,
-                txtValor,
-                resultado
+                linhaDestino
         );
 
         layout.getChildren().add(card);
@@ -148,7 +156,7 @@ public class MainView {
                 event -> converter()
         );
 
-        txtValor.textProperty().addListener(
+        txtOrigem.textProperty().addListener(
                 (obs, oldValue, newValue) ->
                         converter()
         );
@@ -175,14 +183,14 @@ public class MainView {
             if (
                     moedaOrigem.getValue() == null
                             || moedaDestino.getValue() == null
-                            || txtValor.getText().isEmpty()
+                            || txtOrigem.getText().isEmpty()
             ) {
                 return;
             }
 
             double valor =
                     Double.parseDouble(
-                            txtValor.getText()
+                            txtOrigem.getText()
                     );
 
             double convertido =
@@ -192,7 +200,7 @@ public class MainView {
                             valor
                     );
 
-            resultado.setText(
+            txtDestino.setText(
                     String.format(
                             "%.2f",
                             convertido
@@ -200,7 +208,8 @@ public class MainView {
             );
 
         } catch (Exception e) {
-            resultado.setText("Erro ao converter");
+            txtDestino.setText("Erro ao converter");
+            e.printStackTrace();
         }
     }
 
