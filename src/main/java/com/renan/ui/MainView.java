@@ -66,24 +66,36 @@ public class MainView {
         );
 
         moedaOrigem.setStyle(
-                Styles.COMBO
+                Styles.COMBO +
+                        "-fx-text-fill: white;"
         );
 
         moedaDestino.setStyle(
-                Styles.COMBO
+                Styles.COMBO +
+                        "-fx-text-fill: white;"
+        );
+
+        txtOrigem.setStyle(
+                Styles.TEXT_FIELD
+        );
+
+        txtDestino.setStyle(
+                Styles.TEXT_FIELD
         );
 
         btnTrocar.setStyle(
                 Styles.SWAP_BUTTON
         );
 
-        moedaOrigem.setPrefWidth(300);
+        moedaOrigem.setPrefWidth(220);
 
-        moedaDestino.setPrefWidth(300);
+        moedaDestino.setPrefWidth(220);
 
         btnTrocar.setMinSize(50, 50);
 
         btnTrocar.setMaxSize(50, 50);
+
+        configurarComboBox();
     }
 
     public VBox getLayout() {
@@ -280,7 +292,7 @@ public class MainView {
 
             txtDestino.setText(
                     String.format(
-                            "%.4f",
+                            "%.2f",
                             convertido
                     )
             );
@@ -317,7 +329,7 @@ public class MainView {
 
             txtOrigem.setText(
                     String.format(
-                            "%.4f",
+                            "%.2f",
                             convertido
                     )
             );
@@ -328,5 +340,35 @@ public class MainView {
         finally {
             atualizando = false;
         }
+    }
+
+    private void configurarComboBox() {
+        moedaOrigem.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Moeda item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setTextFill(javafx.scene.paint.Color.WHITE);
+                }
+            }
+        });
+
+        moedaDestino.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Moeda item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                    setTextFill(javafx.scene.paint.Color.WHITE);
+                }
+            }
+        });
     }
 }
