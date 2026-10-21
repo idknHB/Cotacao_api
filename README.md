@@ -1,160 +1,57 @@
 # Currency Converter
 
-> A desktop application built with Java and JavaFX for real-time currency conversion using live exchange rates.
+A JavaFX desktop application for converting currencies using exchange rates from the [open.er-api.com](https://open.er-api.com/) service. It supports conversion in either direction, currency selection, and swapping the source and destination currencies.
 
-Currency Converter is a desktop application designed to provide fast and intuitive currency conversion between multiple international currencies.
+## Features
 
-The project was developed as a practical study of Java desktop development, REST API consumption, software architecture, asynchronous operations, caching strategies, and user interface design.
+- Load the currency list from the exchange-rate service
+- Convert between supported currencies while typing in either amount field
+- Swap the source and destination currencies
+- Cache exchange-rate responses by source currency for the lifetime of the application
+- Display currency codes and localized names
 
----
-
-## 💱 Project Overview
-
-The application allows users to convert values between different currencies in real time using exchange rates obtained from an external API.
-
-Unlike traditional calculators, the converter supports bidirectional conversion, allowing the user to edit either field while automatically updating the opposite value.
-
-The project focuses on providing a clean user experience while maintaining a well-structured and maintainable codebase.
-
----
-
-## ✨ Features
-
-### Currency Conversion
-
-- Real-time exchange rate retrieval
-- Support for multiple international currencies
-- Bidirectional conversion
-- Automatic conversion while typing
-- Currency swap functionality
-
-### Performance
-
-- Exchange rate caching
-- Reduced API requests
-- Faster currency switching
-- Improved UI responsiveness
-
-### User Interface
-
-- Modern dark theme
-- Google-inspired layout
-- Real-time updates
-- Simplified workflow
-- Responsive controls
-
----
-
-## 🛠️ Technologies
+## Technology
 
 - Java 21
-- JavaFX
-- Gson
-- Maven
-- Exchange Rate API
-- Git / GitHub
+- JavaFX 21
+- Gson 2.13.1
+- Java `HttpClient`
+- Maven and JavaFX Maven Plugin
 
----
+## Run locally
 
-## 🏗️ Architecture
+Requirements: Java 21 and a graphical desktop environment.
 
-The application follows a layered architecture to improve maintainability and separation of responsibilities.
+From the repository root:
 
-```text
-com.renan
-
-├── model
-│   ├── CurrencyResponse
-│   └── Moeda
-│
-├── service
-│   ├── ApiCliente
-│   └── ConversorService
-│
-├── ui
-│   ├── MainView
-│   └── Styles
-│
-└── Main
+```bash
+mvn javafx:run
 ```
 
-### Responsibilities
+The Maven JavaFX plugin launches `com.renan.Main`.
 
-#### Model
+## How it works
 
-Responsible for representing application data and API responses.
+The source tree separates the JavaFX interface (`ui`), currency and response models (`model`), and conversion and HTTP code (`service`). `ApiCliente` requests the latest rates for a base currency. `ConversorService` parses the JSON response with Gson, caches it by base currency, and multiplies the entered amount by the selected destination rate. The interface uses JavaFX listeners to recalculate either direction and guards updates to prevent the two fields from repeatedly updating each other.
 
-#### Service
+```text
+src/main/java/com/renan/
+├── Main.java
+├── model/
+│   ├── CurrencyResponse.java
+│   └── Moeda.java
+├── service/
+│   ├── ApiCliente.java
+│   └── ConversorService.java
+└── ui/
+    ├── MainView.java
+    └── Styles.java
+```
 
-Handles communication with external services, caching and conversion logic.
+## Current scope and limitations
 
-#### UI
+This is a completed personal learning project. The HTTP request is synchronous when a rate is not yet cached, so conversion can temporarily block the JavaFX interface on a cache miss. The cache has no expiration, and the HTTP client currently returns the response body without checking the HTTP status. These are useful areas for future improvements, along with clearer user-facing error messages and automated tests.
 
-Responsible for JavaFX components, event handling and user interactions.
+## Author
 
----
-
-## ⚙️ Technical Highlights
-
-### REST API Consumption
-
-The application retrieves live exchange rates from an external API and maps the JSON responses using Gson.
-
-### Caching System
-
-To avoid unnecessary requests and improve performance, exchange rates are cached after the first request.
-
-### Bidirectional Conversion
-
-Users can type values in either currency field, and the application automatically performs the reverse conversion when needed.
-
-### Event Management
-
-Special handling was implemented to prevent recursive updates between text fields during automatic conversions.
-
----
-
-## 📈 Development Journey
-
-During development, several improvements were implemented:
-
-- Initial single-direction conversion
-- Currency name support
-- Layer separation (UI / Service / Model)
-- Conversion cache implementation
-- Automatic currency swapping
-- Bidirectional conversion
-- Interface redesign
-- Performance optimization
-
----
-
-## 🎯 Learning Goals
-
-This project was developed to improve practical experience with:
-
-- Java desktop development
-- JavaFX
-- REST APIs
-- JSON serialization/deserialization
-- Software architecture
-- Event-driven programming
-- Caching strategies
-- Git version control
-- User interface design
-
----
-
-## 🚧 Project Status
-
-**Version 1.0 — Completed**
-
-The application is fully functional and currently fulfills its original objectives. Future improvements may focus on visual enhancements and additional usability features.
-
----
-
-## 👨‍💻 Author
-
-**Renan Hammerschlag**
-
-Developed as a personal learning and portfolio project.
+Renan Hammerschlag
